@@ -1,10 +1,11 @@
-package com.abarska.trackensuretest
+package com.abarska.trackensuretest.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.abarska.trackensuretest.R
 
 class StationStatisticsFragment : Fragment() {
 

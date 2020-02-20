@@ -1,4 +1,4 @@
-package com.abarska.trackensuretest
+package com.abarska.trackensuretest.adapters
 
 import android.content.Context
 import androidx.recyclerview.widget.ListAdapter

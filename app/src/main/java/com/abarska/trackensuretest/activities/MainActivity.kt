@@ -1,4 +1,4 @@
-package com.abarska.trackensuretest
+package com.abarska.trackensuretest.activities
 
 import android.app.Activity
 import android.content.Intent
@@ -8,6 +8,8 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
+import com.abarska.trackensuretest.R
+import com.abarska.trackensuretest.adapters.TabFragmentPagerAdapter
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 
@@ -23,7 +25,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val viewPager = findViewById<ViewPager>(R.id.viewPager)
-        val adapter = TabFragmentPagerAdapter(supportFragmentManager)
+        val adapter =
+            TabFragmentPagerAdapter(
+                supportFragmentManager
+            )
         viewPager.adapter = adapter
 
         mFirebaseAuth = FirebaseAuth.getInstance()
