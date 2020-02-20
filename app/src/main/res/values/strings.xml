@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">TrackEnsureTest</string>
+    <string name="str1">String one</string>
+    <string name="str2">String two</string>
+    <string name="str3">String three</string>
+
+</resources>
