@@ -4,4 +4,6 @@
     <string name="str2">String two</string>
     <string name="str3">String three</string>
 
+    <string name="action_sign_out">Sign out</string>
+
 </resources>

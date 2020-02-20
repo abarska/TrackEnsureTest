@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "388993699776",
+    "firebase_url": "https://trackensuretest-b3d15.firebaseio.com",
+    "project_id": "trackensuretest-b3d15",
+    "storage_bucket": "trackensuretest-b3d15.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388993699776:android:1b89e1449519d9281b8225",
+        "android_client_info": {
+          "package_name": "com.abarska.trackensuretest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "388993699776-8li60v873nngto0harv07eod4u85rec0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.abarska.trackensuretest",
+            "certificate_hash": "1600cb03162903a985b11bc4ceb75182392fcdb4"
+          }
+        },
+        {
+          "client_id": "388993699776-c9372kd8pd40ru0lv70c2usk05khfgmo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQ3Eeqs-RYceEhP3DgDDqHUmYOpbwgXJ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "388993699776-c9372kd8pd40ru0lv70c2usk05khfgmo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
