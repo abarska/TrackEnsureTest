@@ -1,14 +1,16 @@
-package com.abarska.trackensuretest.data
+package com.abarska.trackensuretest.entities
 
 import androidx.annotation.NonNull
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "station_table")
+const val STATION_TABLE = "station_table"
+
+@Entity(tableName = STATION_TABLE)
 data class Station(
 
-    @PrimaryKey(autoGenerate = true)
-    val stationId: Long,
+    @PrimaryKey
+    val stationId: String,
 
     @NonNull
     var stationName: String,
@@ -20,5 +22,5 @@ data class Station(
     val lng: Double,
 
     @NonNull
-    var fuelProvider: String
+    var supplier: String
 )

@@ -2,7 +2,6 @@ package com.abarska.trackensuretest.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +23,6 @@ class StationListFragment : Fragment() {
         val fab = rootView.findViewById<FloatingActionButton>(R.id.add_station_fab)
         fab.setOnClickListener {
             startActivity(Intent(activity, MapActivity::class.java))
-            Log.i("MY_TAG", "FAB was clicked")
         }
         return rootView
     }

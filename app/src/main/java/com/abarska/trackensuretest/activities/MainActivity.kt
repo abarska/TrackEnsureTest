@@ -53,9 +53,10 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_SIGN_IN) {
-            if (resultCode == Activity.RESULT_OK) {
-                Toast.makeText(this, "signed in successfully", Toast.LENGTH_SHORT).show()
-            } else if (resultCode == Activity.RESULT_CANCELED) {
+//            if (resultCode == Activity.RESULT_OK) {
+//                Toast.makeText(this, "signed in successfully", Toast.LENGTH_SHORT).show()
+//            }
+            if (resultCode == Activity.RESULT_CANCELED) {
                 Toast.makeText(this, "sign in cancelled", Toast.LENGTH_SHORT).show()
                 finish()
             }

@@ -6,4 +6,10 @@
 
     <string name="action_sign_out">Sign out</string>
 
+    <string name="add_station_header">Add to favorites?</string>
+    <string name="station_name">Name</string>
+    <string name="station_supplier">Fuel supplier</string>
+    <string name="button_save">Save</string>
+    <string name="button_dismiss">Dismiss</string>
+
 </resources>

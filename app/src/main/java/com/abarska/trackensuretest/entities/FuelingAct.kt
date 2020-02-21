@@ -1,4 +1,4 @@
-package com.abarska.trackensuretest.data
+package com.abarska.trackensuretest.entities
 
 import androidx.annotation.NonNull
 import androidx.room.Entity
