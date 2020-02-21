@@ -3,7 +3,7 @@ package com.abarska.trackensuretest.adapters
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.abarska.trackensuretest.fragments.StationListFragment
+import com.abarska.trackensuretest.fragments.ListFragment
 import com.abarska.trackensuretest.fragments.StationStatisticsFragment
 
 class TabFragmentPagerAdapter(fm: FragmentManager) :
@@ -11,7 +11,7 @@ class TabFragmentPagerAdapter(fm: FragmentManager) :
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
-            0 -> StationListFragment()
+            0 -> ListFragment()
             1 -> StationStatisticsFragment()
             else -> throw IllegalArgumentException("wrong tab position")
         }
