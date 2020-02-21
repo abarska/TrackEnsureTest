@@ -11,8 +11,11 @@
     <string name="station_supplier">Fuel supplier</string>
     <string name="button_save">Save</string>
     <string name="button_dismiss">Dismiss</string>
+    <string name="button_cancel">Cancel</string>
 
     <string name="favorites_tab_header">Favorites</string>
     <string name="statistics_tab_header">Statistics</string>
+
+    <string name="edit_station_header">Change station details:</string>
 
 </resources>

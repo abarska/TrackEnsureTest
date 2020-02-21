@@ -36,7 +36,7 @@ class ListFragment : Fragment() {
         val factory = ListViewModelFactory(app)
         val listViewModel = ViewModelProviders.of(this, factory).get(ListViewModel::class.java)
 
-        val adapter = StationAdapter()
+        val adapter = StationAdapter(activity!!, listViewModel)
         listViewModel.stations.observe(viewLifecycleOwner, Observer { list ->
             list?.let {
                 adapter.data = list

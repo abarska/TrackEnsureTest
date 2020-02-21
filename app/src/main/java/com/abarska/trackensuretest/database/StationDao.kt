@@ -15,7 +15,7 @@ interface StationDao {
     suspend fun insert(station: Station)
 
     @Update
-    fun update(station: Station)
+    suspend fun update(station: Station)
 
     @Query("SELECT COUNT (stationId) FROM $STATION_TABLE")
     suspend fun getCount(): Int
@@ -30,5 +30,5 @@ interface StationDao {
     fun clearAll()
 
     @Query("DELETE FROM $STATION_TABLE WHERE stationId = :key")
-    fun delete(key: Long)
+    suspend fun delete(key: String)
 }
