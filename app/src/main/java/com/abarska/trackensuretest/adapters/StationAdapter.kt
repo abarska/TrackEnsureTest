@@ -2,13 +2,14 @@ package com.abarska.trackensuretest.adapters
 
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.abarska.trackensuretest.R
 import com.abarska.trackensuretest.entities.Station
 
-class StationAdapter : RecyclerView.Adapter<TextItemViewHolder>() {
+class StationAdapter : RecyclerView.Adapter<ItemViewHolder>() {
 
     var data = listOf<Station>()
         set(value) {
@@ -18,20 +19,17 @@ class StationAdapter : RecyclerView.Adapter<TextItemViewHolder>() {
 
     override fun getItemCount() = data.size
 
-    override fun onBindViewHolder(holder: TextItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = data[position]
-        holder.textView.text = item.stationName
+        val textView = holder.view.findViewById<TextView>(R.id.station_item_textview)
+        textView.text = item.stationName
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextItemViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val view =
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.station_list_item,
-                parent,
-                false
-            ) as TextView
-        return TextItemViewHolder(view)
+            LayoutInflater.from(parent.context).inflate(R.layout.station_list_item, parent, false)
+        return ItemViewHolder(view)
     }
 }
 
-class TextItemViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
+class ItemViewHolder(val view: View) : RecyclerView.ViewHolder(view)

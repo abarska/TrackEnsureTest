@@ -25,10 +25,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val viewPager = findViewById<ViewPager>(R.id.viewPager)
-        val adapter =
-            TabFragmentPagerAdapter(
-                supportFragmentManager
-            )
+        val adapter = TabFragmentPagerAdapter(this, supportFragmentManager)
         viewPager.adapter = adapter
 
         mFirebaseAuth = FirebaseAuth.getInstance()

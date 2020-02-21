@@ -3,5 +3,8 @@
     <dimen name="fab_button">56dp</dimen>
     <dimen name="standard_margin">16dp</dimen>
     <dimen name="double_margin">32dp</dimen>
+    <dimen name="list_item_height">36dp</dimen>
+
     <dimen name="textSize">16sp</dimen>
+    <dimen name="bigTextSize">20sp</dimen>
 </resources>
