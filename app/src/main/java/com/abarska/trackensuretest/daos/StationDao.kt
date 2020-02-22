@@ -19,17 +19,14 @@ interface StationDao {
     @Update
     suspend fun update(station: Station)
 
+    @Query("SELECT * FROM $STATION_TABLE ORDER BY $LAST_EDIT DESC")
+    fun getAllStations(): LiveData<List<Station>>
+
     @Query("SELECT COUNT ($STATION_ID) FROM $STATION_TABLE")
     suspend fun getCount(): Int
 
     @Query("SELECT * FROM $STATION_TABLE WHERE $STATION_ID = :key")
-    fun getStation(key: String): LiveData<Station>
-
-    @Query("SELECT * FROM $STATION_TABLE WHERE $STATION_ID = :key")
-    suspend fun getStationById(key: String): Station
-
-    @Query("SELECT * FROM $STATION_TABLE ORDER BY $LAST_EDIT DESC")
-    fun getAllStations(): LiveData<List<Station>>
+    fun getStationById(key: String): LiveData<Station>
 
     @Query("DELETE FROM $STATION_TABLE WHERE $STATION_ID = :key")
     suspend fun delete(key: String)

@@ -9,7 +9,7 @@
 
     <string name="action_sign_out">Sign out</string>
 
-    <string name="add_fueling_info">Add fueling info:</string>
+    <string name="add_record">Add record:</string>
     <string name="station_name">Station Name</string>
     <string name="station_supplier">Fuel supplier</string>
     <string name="button_save">Save</string>
@@ -19,7 +19,7 @@
     <string name="favorites_tab_header">Favorites</string>
     <string name="statistics_tab_header">Statistics</string>
 
-    <string name="edit_station_header">Change station details:</string>
+    <string name="edit_station_header">Change station name:</string>
 
     <!-- toast messages -->
     <string name="sign_in_canceled">Sign in canceled</string>

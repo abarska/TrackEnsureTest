@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey
 
 const val FUELING_ACT_TABLE = "fueling_act_table"
 const val FUELING_ACT_ID = "fueling_act_id"
+const val FUEL_TYPE = "fuel_type"
 const val UNIT_OF_MEASUREMENT = "unit_of_measurement"
 const val PRICE_PER_UNIT = "price_per_unit"
 const val NUMBER_OF_UNITS = "number_of_units"
@@ -24,9 +25,13 @@ const val FOREIGN_KEY_STATION_ID = "foreign_key_station_id"
 )
 data class FuelingAct(
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo(name = FUELING_ACT_ID)
     val dateTime: Long,
+
+    @NonNull
+    @ColumnInfo(name = FUEL_TYPE)
+    val fuelType: String,
 
     @NonNull
     @ColumnInfo(name = UNIT_OF_MEASUREMENT)

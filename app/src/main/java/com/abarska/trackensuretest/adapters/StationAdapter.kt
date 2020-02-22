@@ -46,19 +46,19 @@ class StationAdapter(
     }
 
     private fun showEditStationDialog(station: Station) {
-        val dialogView = activity.layoutInflater.inflate(R.layout.dialog_add_station, null)
 
-        val nameEditText = dialogView.findViewById<EditText>(R.id.station_name_edittext)
+        val dialogView = activity.layoutInflater.inflate(R.layout.dialog_edit_station, null)
+
+        val nameEditText = dialogView.findViewById<EditText>(R.id.edit_name_edittext)
         nameEditText.setText(station.stationName)
-        nameEditText.selectAll()
 
         AlertDialog.Builder(activity)
             .setTitle(activity.getString(R.string.edit_station_header))
             .setView(dialogView)
             .setPositiveButton(activity.getString(R.string.button_save)) { _, _ ->
                 val name =
-                    dialogView.findViewById<EditText>(R.id.station_name_edittext).text.toString()
-                Station(station.id, name, System.currentTimeMillis())
+                    dialogView.findViewById<EditText>(R.id.edit_name_edittext).text.toString()
+                listViewModel.editStation(Station(station.id, name, System.currentTimeMillis()))
             }
             .setNegativeButton(activity.getString(R.string.button_cancel)) { _, _ ->
                 return@setNegativeButton

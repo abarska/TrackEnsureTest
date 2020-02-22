@@ -2,35 +2,36 @@ package com.abarska.trackensuretest.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.abarska.trackensuretest.database.GasStationDatabase
+import com.abarska.trackensuretest.entities.FuelingAct
 import com.abarska.trackensuretest.entities.Station
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class MapViewModel(val app: Application) :
-    AndroidViewModel(app) {
-
-    private val stationDao = GasStationDatabase.getInstance(app).stationDao
+class MapViewModel(val app: Application) : AndroidViewModel(app) {
 
     private var viewModelJob = Job()
-    val ioScope = CoroutineScope(Dispatchers.IO + viewModelJob)
+    private val ioScope = CoroutineScope(Dispatchers.IO + viewModelJob)
 
-    fun getStationById(id: String): Station? {
-        var station : Station? = null
+    private val stationDao = GasStationDatabase.getInstance(app).stationDao
+    private val fuelingActDao = GasStationDatabase.getInstance(app).fuelingActDao
+    var currentStation: LiveData<Station> = stationDao.getStationById("")
+
+    fun insertIntoDatabase(newStation: Station, newFuelingAct: FuelingAct, isNewStation: Boolean) {
         ioScope.launch {
-            station = stationDao.getStationById(id)
+            if (isNewStation) stationDao.insert(newStation)
+            else stationDao.update(newStation)
+            fuelingActDao.insert(newFuelingAct)
         }
-        return station
     }
 
-    fun insertIntoDatabase(newStation: Station) {
-        ioScope.launch {
-            stationDao.insert(newStation)
-        }
+    fun changeCurrentStation(stationId: String) {
+        currentStation = stationDao.getStationById(stationId)
     }
 
     override fun onCleared() {
