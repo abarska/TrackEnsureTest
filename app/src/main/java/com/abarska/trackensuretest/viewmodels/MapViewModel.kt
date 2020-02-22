@@ -1,7 +1,6 @@
 package com.abarska.trackensuretest.viewmodels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -20,6 +19,13 @@ class MapViewModel(val app: Application) :
     private var viewModelJob = Job()
     val ioScope = CoroutineScope(Dispatchers.IO + viewModelJob)
 
+    fun getStationById(id: String): Station? {
+        var station : Station? = null
+        ioScope.launch {
+            station = stationDao.getStationById(id)
+        }
+        return station
+    }
 
     fun insertIntoDatabase(newStation: Station) {
         ioScope.launch {
@@ -30,13 +36,6 @@ class MapViewModel(val app: Application) :
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
-    }
-
-    fun checkRows() {
-        ioScope.launch {
-            val rows = stationDao.getCount()
-            Log.i("MY_TAG", "table has $rows rows")
-        }
     }
 }
 

@@ -1,13 +1,16 @@
 <resources>
     <string name="app_name">TrackEnsureTest</string>
-    <string name="str1">String one</string>
-    <string name="str2">String two</string>
-    <string name="str3">String three</string>
+
+    <string name="octane_87">87 octane</string>
+    <string name="litre">litre</string>
+    <string name="price">Price</string>
+    <string name="quantity">Quantity</string>
+    <string name="total">Total: </string>
 
     <string name="action_sign_out">Sign out</string>
 
-    <string name="add_station_header">Add to favorites?</string>
-    <string name="station_name">Name</string>
+    <string name="add_fueling_info">Add fueling info:</string>
+    <string name="station_name">Station Name</string>
     <string name="station_supplier">Fuel supplier</string>
     <string name="button_save">Save</string>
     <string name="button_dismiss">Dismiss</string>
@@ -17,5 +20,10 @@
     <string name="statistics_tab_header">Statistics</string>
 
     <string name="edit_station_header">Change station details:</string>
+
+    <!-- toast messages -->
+    <string name="sign_in_canceled">Sign in canceled</string>
+    <string name="location_access_denied">Access to your location is needed to display map</string>
+    <string name="internet_access_denied">Internet access is needed to access gas stations info</string>
 
 </resources>

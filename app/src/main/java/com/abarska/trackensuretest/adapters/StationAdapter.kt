@@ -36,7 +36,7 @@ class StationAdapter(
 
         val btnDelete = holder.view.findViewById<ImageView>(R.id.btn_delete_station)
         btnDelete.setOnClickListener {
-            listViewModel.deleteStation(item.stationId)
+            listViewModel.deleteStation(item.id)
         }
 
         val btnEdit = holder.view.findViewById<ImageView>(R.id.btn_edit_station)
@@ -52,26 +52,17 @@ class StationAdapter(
         nameEditText.setText(station.stationName)
         nameEditText.selectAll()
 
-        val supplierEditText = dialogView.findViewById<EditText>(R.id.fuel_supplier_edittext)
-        supplierEditText.setText(station.supplier)
-        nameEditText.selectAll()
-
         AlertDialog.Builder(activity)
             .setTitle(activity.getString(R.string.edit_station_header))
             .setView(dialogView)
             .setPositiveButton(activity.getString(R.string.button_save)) { _, _ ->
                 val name =
                     dialogView.findViewById<EditText>(R.id.station_name_edittext).text.toString()
-                val supplier =
-                    dialogView.findViewById<EditText>(R.id.fuel_supplier_edittext).text.toString()
-                listViewModel.editStation(
-                    Station(station.stationId, name, station.lat, station.lng, supplier)
-                )
+                Station(station.id, name, System.currentTimeMillis())
             }
             .setNegativeButton(activity.getString(R.string.button_cancel)) { _, _ ->
                 return@setNegativeButton
             }.create().show()
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {

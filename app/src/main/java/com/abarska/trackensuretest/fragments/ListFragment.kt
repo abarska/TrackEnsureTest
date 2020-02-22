@@ -38,9 +38,7 @@ class ListFragment : Fragment() {
 
         val adapter = StationAdapter(activity!!, listViewModel)
         listViewModel.stations.observe(viewLifecycleOwner, Observer { list ->
-            list?.let {
-                adapter.data = list
-            }
+            list?.let { adapter.data = list }
         })
         binding.stationListRecycler.adapter = adapter
 

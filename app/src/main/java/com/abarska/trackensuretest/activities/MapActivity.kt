@@ -68,7 +68,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             } else {
                 Toast.makeText(
                     baseContext,
-                    "access to your location is needed to display map",
+                    R.string.location_access_denied,
                     Toast.LENGTH_SHORT
                 ).show()
                 finish()
@@ -77,15 +77,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 //        if (requestCode == REQUEST_INTERNET_PERMISSION) {
 //            if (grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
 //                // use internet to access places
-//                Toast.makeText(
-//                    baseContext,
-//                    "internet permission granted",
-//                    Toast.LENGTH_SHORT
-//                ).show()
 //            } else {
 //                Toast.makeText(
 //                    baseContext,
-//                    "internet access is needed to access gas stations info",
+//                    R.string.internet_access_denied,
 //                    Toast.LENGTH_SHORT
 //                ).show()
 //                finish()
@@ -100,24 +95,32 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                     .position(poi.latLng)
                     .title(poi.name)
             )
-            showAddStationDialog(poi)
+            showAddFuelingDialog(poi)
         }
     }
 
-    private fun showAddStationDialog(poi: PointOfInterest) {
+    private fun showAddFuelingDialog(poi: PointOfInterest) {
+
         val dialogView = layoutInflater.inflate(R.layout.dialog_add_station, null)
+        val station = mapViewModel.getStationById(poi.placeId)
+        dialogView.findViewById<EditText>(R.id.station_name_edittext)
+            .setText(station?.stationName ?: "")
+
         AlertDialog.Builder(this)
-            .setTitle(getString(R.string.add_station_header))
+            .setTitle(getString(R.string.add_fueling_info))
             .setView(dialogView)
             .setPositiveButton(getString(R.string.button_save)) { _, _ ->
                 val stationId = poi.placeId
                 val name =
                     dialogView.findViewById<EditText>(R.id.station_name_edittext).text.toString()
-                val lat = poi.latLng.latitude
-                val lng = poi.latLng.longitude
-                val supplier =
-                    dialogView.findViewById<EditText>(R.id.fuel_supplier_edittext).text.toString()
-                mapViewModel.insertIntoDatabase(Station(stationId, name, lat, lng, supplier))
+                mapViewModel.insertIntoDatabase(
+                    Station(
+                        stationId,
+                        name,
+                        System.currentTimeMillis()
+                    )
+                )
+                finish()
             }
             .setNegativeButton(getString(R.string.button_dismiss)) { _, _ ->
                 return@setNegativeButton
@@ -152,11 +155,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
 //    private fun enableInternetConnectivity() {
 //        if (isInternetPermissionGranted()) {
-//            Toast.makeText(
-//                baseContext,
-//                "internet permission granted",
-//                Toast.LENGTH_SHORT
-//            ).show()
+//            use internet
 //        } else {
 //            ActivityCompat.requestPermissions(
 //                this,
