@@ -32,8 +32,7 @@ class ListFragment : Fragment() {
         )
         binding.lifecycleOwner = this
 
-        val app = requireNotNull(this.activity).application
-        val factory = ListViewModelFactory(app)
+        val factory = ListViewModelFactory(requireNotNull(this.activity).application)
         val listViewModel = ViewModelProviders.of(this, factory).get(ListViewModel::class.java)
 
         val adapter = StationAdapter(activity!!, listViewModel)

@@ -17,7 +17,7 @@ class StationAdapter(
     private val activity: FragmentActivity,
     private val listViewModel: ListViewModel
 ) :
-    RecyclerView.Adapter<ItemViewHolder>() {
+    RecyclerView.Adapter<StationItemViewHolder>() {
 
     var data = listOf<Station>()
         set(value) {
@@ -27,7 +27,13 @@ class StationAdapter(
 
     override fun getItemCount() = data.size
 
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StationItemViewHolder {
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.station_data_item, parent, false)
+        return StationItemViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: StationItemViewHolder, position: Int) {
 
         val item = data[position]
 
@@ -64,12 +70,6 @@ class StationAdapter(
                 return@setNegativeButton
             }.create().show()
     }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.station_list_item, parent, false)
-        return ItemViewHolder(view)
-    }
 }
 
-class ItemViewHolder(val view: View) : RecyclerView.ViewHolder(view)
+class StationItemViewHolder(val view: View) : RecyclerView.ViewHolder(view)

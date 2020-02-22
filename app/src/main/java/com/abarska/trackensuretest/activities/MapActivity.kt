@@ -117,15 +117,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         )
         fuelSpinner.adapter = fuelAdapter
 
-        val unitSpinner = dialogView.findViewById<Spinner>(R.id.unit_of_measurement_spinner)
-        val unitTypes = application.resources.getStringArray(R.array.units_of_measurement)
-        val unitAdapter = ArrayAdapter<String>(
-            baseContext,
-            android.R.layout.simple_spinner_dropdown_item,
-            unitTypes
-        )
-        unitSpinner.adapter = unitAdapter
-
         var isNewStation = true
 
         mapViewModel.currentStation.observe(this, Observer { station ->
@@ -148,10 +139,22 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 val newStation = Station(placeId, stationName, timestamp)
 
                 val fuelType = fuelTypes[fuelSpinner.selectedItemPosition]
-                val unitType = unitTypes[unitSpinner.selectedItemPosition]
-                val unitPrice = dialogView.findViewById<EditText>(R.id.price_per_unit_edittext).text.toString().toDouble()
-                val numberOfUnits = dialogView.findViewById<EditText>(R.id.number_of_units_edittext).text.toString().toDouble()
-                val newFuelingAct = FuelingAct(timestamp, fuelType, unitType, unitPrice, numberOfUnits, placeId)
+                val unitPrice =
+                    dialogView.findViewById<EditText>(R.id.price_per_unit_edittext).text.toString()
+                        .toDouble()
+                val numberOfUnits =
+                    dialogView.findViewById<EditText>(R.id.number_of_units_edittext).text.toString()
+                        .toDouble()
+                val totalSpend = unitPrice * numberOfUnits
+                val newFuelingAct =
+                    FuelingAct(
+                        timestamp,
+                        fuelType,
+                        unitPrice,
+                        numberOfUnits,
+                        totalSpend,
+                        placeId
+                    )
 
                 mapViewModel.insertIntoDatabase(newStation, newFuelingAct, isNewStation)
                 finish()

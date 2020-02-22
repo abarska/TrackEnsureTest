@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="units_of_measurement">
-        <item>gallon</item>
-        <item>litre</item>
-    </string-array>
-
     <string-array name="types_of_fuel">
+        <item>diesel</item>
         <item>87 octane</item>
         <item>89 octane</item>
         <item>91 octane</item>
-        <item>diesel</item>
     </string-array>
 
 </resources>

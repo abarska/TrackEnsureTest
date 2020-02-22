@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.abarska.trackensuretest.R
 import com.abarska.trackensuretest.fragments.ListFragment
-import com.abarska.trackensuretest.fragments.StationStatisticsFragment
+import com.abarska.trackensuretest.fragments.StatisticsFragment
 
 const val PAGE_COUNT = 2
 
@@ -16,7 +16,7 @@ class TabFragmentPagerAdapter(private val context: Context, fm: FragmentManager)
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> ListFragment()
-            1 -> StationStatisticsFragment()
+            1 -> StatisticsFragment()
             else -> throw IllegalArgumentException("wrong tab position")
         }
     }

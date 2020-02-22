@@ -1,18 +1,25 @@
 package com.abarska.trackensuretest.daos
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.abarska.trackensuretest.entities.FUELING_ACT_ID
-import com.abarska.trackensuretest.entities.FUELING_ACT_TABLE
-import com.abarska.trackensuretest.entities.FuelingAct
+import com.abarska.trackensuretest.entities.*
 
 @Dao
 interface FuelingActDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(act: FuelingAct)
 
-    @Query("SELECT COUNT ($FUELING_ACT_ID) FROM $FUELING_ACT_TABLE")
-    suspend fun getCount(): Int
+    @Query(
+        "SELECT $STATION_TABLE.$STATION_NAME AS stationName, " +
+                "SUM($FUELING_ACT_TABLE.$TOTAL_SPEND) AS totalSpend, " +
+                "SUM($FUELING_ACT_TABLE.$NUMBER_OF_LITERS) AS totalLiters " +
+                "FROM $STATION_TABLE LEFT JOIN $FUELING_ACT_TABLE " +
+                "ON $STATION_TABLE.$STATION_ID = $FUELING_ACT_TABLE.$FOREIGN_KEY_STATION_ID " +
+                "GROUP BY $FUELING_ACT_TABLE.$FOREIGN_KEY_STATION_ID"
+    )
+    fun getStationSpendLiter(): LiveData<List<JoinStationSpendLiterData>>
 }

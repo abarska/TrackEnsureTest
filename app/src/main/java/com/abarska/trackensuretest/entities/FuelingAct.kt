@@ -9,9 +9,9 @@ import androidx.room.PrimaryKey
 const val FUELING_ACT_TABLE = "fueling_act_table"
 const val FUELING_ACT_ID = "fueling_act_id"
 const val FUEL_TYPE = "fuel_type"
-const val UNIT_OF_MEASUREMENT = "unit_of_measurement"
-const val PRICE_PER_UNIT = "price_per_unit"
-const val NUMBER_OF_UNITS = "number_of_units"
+const val PRICE_PER_LITER = "price_per_liter"
+const val NUMBER_OF_LITERS = "number_of_liters"
+const val TOTAL_SPEND = "total_spend"
 const val FOREIGN_KEY_STATION_ID = "foreign_key_station_id"
 
 @Entity(
@@ -34,16 +34,16 @@ data class FuelingAct(
     val fuelType: String,
 
     @NonNull
-    @ColumnInfo(name = UNIT_OF_MEASUREMENT)
-    val unitOfMeasurement: String,
+    @ColumnInfo(name = PRICE_PER_LITER)
+    val pricePerLiter: Double,
 
     @NonNull
-    @ColumnInfo(name = PRICE_PER_UNIT)
-    val pricePerUnit: Double,
+    @ColumnInfo(name = NUMBER_OF_LITERS)
+    val numberOfLiters: Double,
 
     @NonNull
-    @ColumnInfo(name = NUMBER_OF_UNITS)
-    val numberOfUnits: Double,
+    @ColumnInfo(name = TOTAL_SPEND)
+    val totalSpend: Double,
 
     @NonNull
     @ColumnInfo(name = FOREIGN_KEY_STATION_ID)
