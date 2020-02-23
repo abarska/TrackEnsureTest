@@ -10,8 +10,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.abarska.trackensuretest.R
+import com.abarska.trackensuretest.adapters.LISTVIEWMODEL_SERIALIZABLE
 import com.abarska.trackensuretest.adapters.POSITION
-import com.abarska.trackensuretest.adapters.SERIALIZABLE
 import com.abarska.trackensuretest.entities.Station
 import com.abarska.trackensuretest.viewmodels.ListViewModel
 
@@ -22,13 +22,16 @@ class EditStationDialogFragment : DialogFragment() {
         val listViewModel = ViewModelProvider(this).get(ListViewModel::class.java)
 
         val dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_edit_station, null)
+
         val nameEditText = dialogView.findViewById<EditText>(R.id.edit_name_edittext)
 
         var station: Station? = null
         arguments?.let {
             val position = it.getInt(POSITION)
             station =
-                (it.getSerializable(SERIALIZABLE) as ListViewModel).stations.value?.get(position)
+                (it.getSerializable(LISTVIEWMODEL_SERIALIZABLE) as ListViewModel).stations.value?.get(
+                    position
+                )
             nameEditText.setText(station?.stationName)
         }
 

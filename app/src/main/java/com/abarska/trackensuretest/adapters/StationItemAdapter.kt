@@ -14,7 +14,7 @@ import com.abarska.trackensuretest.fragments.EditStationDialogFragment
 import com.abarska.trackensuretest.viewmodels.ListViewModel
 
 const val POSITION = "position"
-const val SERIALIZABLE = "serializable"
+const val LISTVIEWMODEL_SERIALIZABLE = "listviewmodel_serializable"
 
 class StationItemAdapter(
     private val activity: FragmentActivity,
@@ -46,7 +46,7 @@ class StationItemAdapter(
             val dialog = EditStationDialogFragment()
             val args = Bundle()
             args.putInt(POSITION, position)
-            args.putSerializable(SERIALIZABLE, listViewModel)
+            args.putSerializable(LISTVIEWMODEL_SERIALIZABLE, listViewModel)
             dialog.arguments = args
             dialog.show(
                 activity.supportFragmentManager,
