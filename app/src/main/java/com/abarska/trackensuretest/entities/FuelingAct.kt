@@ -39,7 +39,7 @@ data class FuelingAct(
 
     @NonNull
     @ColumnInfo(name = NUMBER_OF_LITERS)
-    val numberOfLiters: Double,
+    val numberOfLiters: Int,
 
     @NonNull
     @ColumnInfo(name = TOTAL_SPEND)

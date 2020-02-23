@@ -6,12 +6,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.abarska.trackensuretest.database.GasStationDatabase
-import com.abarska.trackensuretest.entities.JoinStationSpendLiterData
+import com.abarska.truckensuretest.util.DatabaseJoinUtilityClasses
 
 class StatisticsViewModel(app: Application) : AndroidViewModel(app) {
 
     private val fuelingActDao = GasStationDatabase.getInstance(app).fuelingActDao
-    val joinedData: LiveData<List<JoinStationSpendLiterData>> =
+    val joinedDataDatabase: LiveData<List<DatabaseJoinUtilityClasses>> =
         fuelingActDao.getStationSpendLiter()
 }
 

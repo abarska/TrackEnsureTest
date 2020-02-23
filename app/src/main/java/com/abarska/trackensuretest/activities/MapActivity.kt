@@ -3,9 +3,9 @@ package com.abarska.trackensuretest.activities
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.text.InputFilter
+import android.text.TextUtils
 import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -15,11 +15,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.abarska.trackensuretest.R
-import com.abarska.trackensuretest.databinding.ActivityMapBinding
+import com.abarska.trackensuretest.databinding.DialogAddRecordBinding
 import com.abarska.trackensuretest.entities.FuelingAct
 import com.abarska.trackensuretest.entities.Station
 import com.abarska.trackensuretest.viewmodels.MapViewModel
 import com.abarska.trackensuretest.viewmodels.MapViewModelFactory
+import com.abarska.truckensuretest.util.DecimalInputFilter
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -31,7 +32,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 
 const val REQUEST_LOCATION_PERMISSION = 101
 const val DEFAULT_ZOOM = 15F
-const val INTENT_EXTRA_POI_PLACE_ID = "intent_extra_poi_place_id"
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -41,12 +41,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_map)
 
-        val binding: ActivityMapBinding =
-            DataBindingUtil.setContentView(this, R.layout.activity_map)
         val factory = MapViewModelFactory(requireNotNull(this).application)
         mapViewModel = ViewModelProviders.of(this, factory).get(MapViewModel::class.java)
-        binding.mapViewModel = mapViewModel
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -61,108 +59,11 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         enableMyLocation()
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            if (grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                enableMyLocation()
-            } else {
-                Toast.makeText(
-                    baseContext,
-                    R.string.location_access_denied,
-                    Toast.LENGTH_SHORT
-                ).show()
-                finish()
-            }
-        }
-//        if (requestCode == REQUEST_INTERNET_PERMISSION) {
-//            if (grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-//                // use internet to access places
-//            } else {
-//                Toast.makeText(
-//                    baseContext,
-//                    R.string.internet_access_denied,
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//                finish()
-//            }
-//        }
-    }
-
     private fun setPoiClick() {
         map.setOnPoiClickListener { poi ->
-            map.addMarker(
-                MarkerOptions()
-                    .position(poi.latLng)
-                    .title(poi.name)
-            )
+            map.addMarker(MarkerOptions().position(poi.latLng).title(poi.name))
             showAddRecordDialog(poi.placeId)
         }
-    }
-
-    private fun showAddRecordDialog(placeId: String) {
-
-        mapViewModel.changeCurrentStation(placeId)
-        val dialogView = layoutInflater.inflate(R.layout.dialog_add_record, null)
-
-        val fuelSpinner = dialogView.findViewById<Spinner>(R.id.fuel_type_spinner)
-        val fuelTypes = application.resources.getStringArray(R.array.types_of_fuel)
-        val fuelAdapter = ArrayAdapter<String>(
-            baseContext,
-            android.R.layout.simple_spinner_dropdown_item,
-            fuelTypes
-        )
-        fuelSpinner.adapter = fuelAdapter
-
-        var isNewStation = true
-
-        mapViewModel.currentStation.observe(this, Observer { station ->
-            station?.let {
-                dialogView.findViewById<EditText>(R.id.station_name_edittext)
-                    .setText(station.stationName)
-                isNewStation = false
-            }
-        })
-
-        AlertDialog.Builder(this)
-            .setTitle(getString(R.string.add_record))
-            .setView(dialogView)
-            .setPositiveButton(getString(R.string.button_save)) { _, _ ->
-
-                val timestamp = System.currentTimeMillis()
-
-                val stationName =
-                    dialogView.findViewById<EditText>(R.id.station_name_edittext).text.toString()
-                val newStation = Station(placeId, stationName, timestamp)
-
-                val fuelType = fuelTypes[fuelSpinner.selectedItemPosition]
-                val unitPrice =
-                    dialogView.findViewById<EditText>(R.id.price_per_unit_edittext).text.toString()
-                        .toDouble()
-                val numberOfUnits =
-                    dialogView.findViewById<EditText>(R.id.number_of_units_edittext).text.toString()
-                        .toDouble()
-                val totalSpend = unitPrice * numberOfUnits
-                val newFuelingAct =
-                    FuelingAct(
-                        timestamp,
-                        fuelType,
-                        unitPrice,
-                        numberOfUnits,
-                        totalSpend,
-                        placeId
-                    )
-
-                mapViewModel.insertIntoDatabase(newStation, newFuelingAct, isNewStation)
-                finish()
-            }
-            .setNegativeButton(getString(R.string.button_dismiss)) { _, _ ->
-                return@setNegativeButton
-            }.create().show()
-
     }
 
     private fun enableMyLocation() {
@@ -190,22 +91,85 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-//    private fun enableInternetConnectivity() {
-//        if (isInternetPermissionGranted()) {
-//            use internet
-//        } else {
-//            ActivityCompat.requestPermissions(
-//                this,
-//                arrayOf(Manifest.permission.INTERNET),
-//                REQUEST_INTERNET_PERMISSION
-//            )
-//        }
-//    }
-//
-//    private fun isInternetPermissionGranted(): Boolean {
-//        return ContextCompat.checkSelfPermission(
-//            this,
-//            Manifest.permission.INTERNET
-//        ) == PackageManager.PERMISSION_GRANTED
-//    }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                enableMyLocation()
+            } else {
+                Toast.makeText(baseContext, R.string.location_access_denied, Toast.LENGTH_SHORT)
+                    .show()
+                finish()
+            }
+        }
+    }
+
+    private fun showAddRecordDialog(placeId: String) {
+
+        mapViewModel.changeCurrentStation(placeId)
+
+        val binding = DataBindingUtil.inflate<DialogAddRecordBinding>(
+            layoutInflater, R.layout.dialog_add_record, null, false
+        )
+        binding.pricePerLiterEdittext.filters = arrayOf<InputFilter>(DecimalInputFilter(3, 2))
+
+        val fuelTypes = application.resources.getStringArray(R.array.types_of_fuel)
+        val fuelAdapter =
+            ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, fuelTypes)
+        binding.fuelTypeSpinner.adapter = fuelAdapter
+
+        var isNewStation = true
+
+        mapViewModel.currentStation.observe(this, Observer { station ->
+            station?.let {
+                binding.stationNameEdittext.setText(station.stationName)
+                isNewStation = false
+            }
+        })
+
+        val dialog = AlertDialog.Builder(this)
+            .setTitle(getString(R.string.add_record))
+            .setView(binding.root)
+            .setPositiveButton(getString(R.string.button_save)) { _, _ ->
+
+                val name = binding.stationNameEdittext.text.toString()
+                val price = binding.pricePerLiterEdittext.text.toString()
+                val liters = binding.numberOfLitersEdittext.text.toString()
+
+                if (TextUtils.isEmpty(name)) binding.stationNameEdittext.error =
+                    getString(R.string.empty_field_warning)
+                if (TextUtils.isEmpty(price)) binding.pricePerLiterEdittext.error =
+                    getString(R.string.empty_field_warning)
+                if (TextUtils.isEmpty(liters)) binding.stationNameEdittext.error =
+                    getString(R.string.empty_field_warning)
+
+                // data validation missing
+
+                val timeStamp = System.currentTimeMillis()
+                val totalSpend = price.toDouble() * liters.toInt()
+                val fuelType = fuelTypes[binding.fuelTypeSpinner.selectedItemPosition]
+
+                mapViewModel.insertIntoDatabase(
+                    Station(placeId, name, timeStamp),
+                    FuelingAct(
+                        timeStamp,
+                        fuelType,
+                        price.toDouble(),
+                        liters.toInt(),
+                        totalSpend,
+                        placeId
+                    ),
+                    isNewStation
+                )
+
+                Toast.makeText(this, R.string.saved_to_database, Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton(getString(R.string.button_dismiss)) { _, _ ->
+                return@setNegativeButton
+            }.create()
+    }
 }
+

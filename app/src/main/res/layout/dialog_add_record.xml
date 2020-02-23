@@ -1,68 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/station_name_edittext"
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:hint="@string/station_name"
-        android:inputType="textCapWords"
-        android:maxLength="100"
-        android:textSize="@dimen/textSize" />
-
-    <Spinner
-        android:id="@+id/fuel_type_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:spinnerMode="dropdown" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/price"
-            android:textColor="@color/colorBlack"
-            android:textSize="@dimen/textSize" />
+        android:orientation="vertical">
 
         <EditText
-            android:id="@+id/price_per_unit_edittext"
-            android:layout_width="100dp"
+            android:id="@+id/station_name_edittext"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
+            android:gravity="center"
+            android:hint="@string/station_name"
+            android:inputType="textCapWords"
+            android:maxLength="100"
             android:textSize="@dimen/textSize" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
+        <Spinner
+            android:id="@+id/fuel_type_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/quantity"
-            android:textColor="@color/colorBlack"
-            android:textSize="@dimen/textSize" />
+            android:layout_gravity="center"
+            android:spinnerMode="dropdown" />
 
-        <EditText
-            android:id="@+id/number_of_units_edittext"
-            android:layout_width="100dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:textSize="@dimen/textSize" />
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/price"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/textSize" />
+
+            <EditText
+                android:id="@+id/price_per_liter_edittext"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:textSize="@dimen/textSize" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/quantity"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/textSize" />
+
+            <EditText
+                android:id="@+id/number_of_liters_edittext"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="4"
+                android:textSize="@dimen/textSize" />
+
+        </LinearLayout>
 
     </LinearLayout>
-
-</LinearLayout>
+</layout>

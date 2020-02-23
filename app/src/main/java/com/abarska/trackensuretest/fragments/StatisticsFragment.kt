@@ -35,7 +35,7 @@ class StatisticsFragment : Fragment() {
             ViewModelProviders.of(this, factory).get(StatisticsViewModel::class.java)
 
         val adapter = StatisticsItemAdapter(activity!!)
-        statisticsViewModel.joinedData.observe(viewLifecycleOwner, Observer { list ->
+        statisticsViewModel.joinedDataDatabase.observe(viewLifecycleOwner, Observer { list ->
             list?.let { adapter.data = list }
         })
         binding.statisticsListRecycler.adapter = adapter
