@@ -130,7 +130,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         })
 
-        val dialog = AlertDialog.Builder(this)
+        AlertDialog.Builder(this)
             .setTitle(getString(R.string.add_record))
             .setView(binding.root)
             .setPositiveButton(getString(R.string.button_save)) { _, _ ->
@@ -169,7 +169,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             }
             .setNegativeButton(getString(R.string.button_dismiss)) { _, _ ->
                 return@setNegativeButton
-            }.create()
+            }.create().show()
     }
 }
 
