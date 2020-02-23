@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.text.InputFilter
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -28,6 +29,7 @@ class AddRecordDialogFragment : DialogFragment() {
         var placeId: String? = null
         arguments?.let {
             placeId = it.getString(PLACE_ID)
+            mapViewModel.changeCurrentStation(placeId!!)
         }
 
         val stationNameEditText = dialogView.findViewById<EditText>(R.id.station_name_edittext)
@@ -52,6 +54,7 @@ class AddRecordDialogFragment : DialogFragment() {
 
         mapViewModel.currentStation.observe(this, Observer { station ->
             station?.let {
+                Log.i("MY_TAG", "station is not null")
                 stationNameEditText.setText(station.stationName)
                 isNewStation = false
             }

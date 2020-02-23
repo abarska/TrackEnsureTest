@@ -48,8 +48,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         map.setOnPoiClickListener { poi ->
 
-            mapViewModel.changeCurrentStation(poi.placeId)
-
             val args = Bundle()
             args.putString(PLACE_ID, poi.placeId)
 
