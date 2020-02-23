@@ -22,9 +22,8 @@ class StatisticsItemAdapter(
     override fun getItemCount() = data.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StatisticsItemViewHolder {
-        val view =
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.statistics_data_item, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.statistics_data_item, parent, false)
         return StatisticsItemViewHolder(view)
     }
 
