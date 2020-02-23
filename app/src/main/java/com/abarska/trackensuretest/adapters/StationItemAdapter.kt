@@ -1,5 +1,6 @@
 package com.abarska.trackensuretest.adapters
 
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,38 +38,43 @@ class StationAdapter(
 
         val item = data[position]
 
-        val textView = holder.view.findViewById<TextView>(R.id.station_item_textview)
-        textView.text = item.stationName
+        holder.view.findViewById<TextView>(R.id.station_item_textview).text = item.stationName
 
-        val btnDelete = holder.view.findViewById<ImageView>(R.id.btn_delete_station)
-        btnDelete.setOnClickListener {
-            listViewModel.deleteStation(item.id)
+        holder.view.findViewById<ImageView>(R.id.btn_edit_station).setOnClickListener {
+            showEditStationDialog(item)
         }
 
-        val btnEdit = holder.view.findViewById<ImageView>(R.id.btn_edit_station)
-        btnEdit.setOnClickListener {
-            showEditStationDialog(item)
+        holder.view.findViewById<ImageView>(R.id.btn_delete_station).setOnClickListener {
+            listViewModel.deleteStation(item.id)
         }
     }
 
     private fun showEditStationDialog(station: Station) {
 
         val dialogView = activity.layoutInflater.inflate(R.layout.dialog_edit_station, null)
-
         val nameEditText = dialogView.findViewById<EditText>(R.id.edit_name_edittext)
         nameEditText.setText(station.stationName)
 
-        AlertDialog.Builder(activity)
+        val dialog = AlertDialog.Builder(activity)
             .setTitle(activity.getString(R.string.edit_station_header))
             .setView(dialogView)
-            .setPositiveButton(activity.getString(R.string.button_save)) { _, _ ->
-                val name =
-                    dialogView.findViewById<EditText>(R.id.edit_name_edittext).text.toString()
-                listViewModel.editStation(Station(station.id, name, System.currentTimeMillis()))
+            .create()
+
+        dialogView.findViewById<TextView>(R.id.edit_dialog_dismiss_button)?.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialogView.findViewById<TextView>(R.id.edit_dialog_save_button)?.setOnClickListener {
+            val newName = nameEditText.text.toString()
+            if (TextUtils.isEmpty(newName)) {
+                nameEditText.error = activity.getString(R.string.empty_field_warning)
+            } else {
+                listViewModel.editStation(Station(station.id, newName, System.currentTimeMillis()))
+                dialog.dismiss()
             }
-            .setNegativeButton(activity.getString(R.string.button_cancel)) { _, _ ->
-                return@setNegativeButton
-            }.create().show()
+        }
+
+        dialog.show()
     }
 }
 

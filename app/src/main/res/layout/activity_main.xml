@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.abarska.trackensuretest.activities.MainActivity">
 
     <androidx.viewpager.widget.ViewPager
@@ -18,4 +17,4 @@
 
     </androidx.viewpager.widget.ViewPager>
 
-</LinearLayout>
+</FrameLayout>

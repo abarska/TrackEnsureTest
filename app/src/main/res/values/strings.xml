@@ -25,7 +25,7 @@
     <string name="sign_in_canceled">Sign in canceled</string>
     <string name="location_access_denied">Access to your location is needed to display map</string>
     <string name="internet_access_denied">Internet access is needed to access gas stations info</string>
-    <string name="empty_field_warning">The item cannot be empty</string>
+    <string name="empty_field_warning">This field cannot be empty</string>
     <string name="saved_to_database">Saved to local database</string>
 
     <!-- statistics strings -->
