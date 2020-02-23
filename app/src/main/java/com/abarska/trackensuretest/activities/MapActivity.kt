@@ -5,21 +5,17 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.InputFilter
 import android.text.TextUtils
-import android.widget.ArrayAdapter
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.abarska.trackensuretest.R
-import com.abarska.trackensuretest.databinding.DialogAddRecordBinding
 import com.abarska.trackensuretest.entities.FuelingAct
 import com.abarska.trackensuretest.entities.Station
 import com.abarska.trackensuretest.viewmodels.MapViewModel
-import com.abarska.trackensuretest.viewmodels.MapViewModelFactory
 import com.abarska.truckensuretest.util.DecimalInputFilter
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -28,7 +24,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 
 const val REQUEST_LOCATION_PERMISSION = 101
 const val DEFAULT_ZOOM = 15F
@@ -43,8 +38,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
 
-        val factory = MapViewModelFactory(requireNotNull(this).application)
-        mapViewModel = ViewModelProviders.of(this, factory).get(MapViewModel::class.java)
+        mapViewModel = ViewModelProvider(this).get(MapViewModel::class.java)
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -55,15 +49,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         map.mapType = GoogleMap.MAP_TYPE_NORMAL
-        setPoiClick()
+        map.setOnPoiClickListener { poi -> showAddRecordDialog(poi.placeId) }
         enableMyLocation()
-    }
-
-    private fun setPoiClick() {
-        map.setOnPoiClickListener { poi ->
-            map.addMarker(MarkerOptions().position(poi.latLng).title(poi.name))
-            showAddRecordDialog(poi.placeId)
-        }
     }
 
     private fun enableMyLocation() {
@@ -111,65 +98,70 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         mapViewModel.changeCurrentStation(placeId)
 
-        val binding = DataBindingUtil.inflate<DialogAddRecordBinding>(
-            layoutInflater, R.layout.dialog_add_record, null, false
-        )
-        binding.pricePerLiterEdittext.filters = arrayOf<InputFilter>(DecimalInputFilter(3, 2))
+        val dialogView = layoutInflater.inflate(R.layout.dialog_add_record, null)
 
-        val fuelTypes = application.resources.getStringArray(R.array.types_of_fuel)
+        val stationNameEditText = dialogView.findViewById<EditText>(R.id.station_name_edittext)
+
+        val pricePerLiterEditText = dialogView.findViewById<EditText>(R.id.price_per_liter_edittext)
+        pricePerLiterEditText.filters = arrayOf<InputFilter>(DecimalInputFilter(3, 2))
+
+        val numberOfLitersEditText =
+            dialogView.findViewById<EditText>(R.id.number_of_liters_edittext)
+
+        val fuelTypes = resources.getStringArray(R.array.types_of_fuel)
         val fuelAdapter =
             ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, fuelTypes)
-        binding.fuelTypeSpinner.adapter = fuelAdapter
+        val fuelTypeSpinner = dialogView.findViewById<Spinner>(R.id.fuel_type_spinner)
+        fuelTypeSpinner.adapter = fuelAdapter
 
         var isNewStation = true
 
         mapViewModel.currentStation.observe(this, Observer { station ->
             station?.let {
-                binding.stationNameEdittext.setText(station.stationName)
+                stationNameEditText.setText(station.stationName)
                 isNewStation = false
             }
         })
 
-        AlertDialog.Builder(this)
+        val dialog = AlertDialog.Builder(this)
             .setTitle(getString(R.string.add_record))
-            .setView(binding.root)
-            .setPositiveButton(getString(R.string.button_save)) { _, _ ->
+            .setView(dialogView)
+            .create()
 
-                val name = binding.stationNameEdittext.text.toString()
-                val price = binding.pricePerLiterEdittext.text.toString()
-                val liters = binding.numberOfLitersEdittext.text.toString()
+        dialogView.findViewById<TextView>(R.id.add_dialog_dismiss_button).setOnClickListener {
+            dialog.dismiss()
+        }
 
-                if (TextUtils.isEmpty(name)) binding.stationNameEdittext.error =
+        dialogView.findViewById<TextView>(R.id.add_dialog_save_button).setOnClickListener {
+
+            val name = stationNameEditText.text.toString()
+            val price = pricePerLiterEditText.text.toString()
+            val liters = numberOfLitersEditText.text.toString()
+
+            val ts = System.currentTimeMillis()
+            val type = fuelTypes[fuelTypeSpinner.selectedItemPosition]
+
+            when {
+                TextUtils.isEmpty(name) -> stationNameEditText.error =
                     getString(R.string.empty_field_warning)
-                if (TextUtils.isEmpty(price)) binding.pricePerLiterEdittext.error =
+                TextUtils.isEmpty(price) -> pricePerLiterEditText.error =
                     getString(R.string.empty_field_warning)
-                if (TextUtils.isEmpty(liters)) binding.stationNameEdittext.error =
+                TextUtils.isEmpty(liters) -> numberOfLitersEditText.error =
                     getString(R.string.empty_field_warning)
-
-                // data validation missing
-
-                val timeStamp = System.currentTimeMillis()
-                val totalSpend = price.toDouble() * liters.toInt()
-                val fuelType = fuelTypes[binding.fuelTypeSpinner.selectedItemPosition]
-
-                mapViewModel.insertIntoDatabase(
-                    Station(placeId, name, timeStamp),
-                    FuelingAct(
-                        timeStamp,
-                        fuelType,
-                        price.toDouble(),
-                        liters.toInt(),
-                        totalSpend,
-                        placeId
-                    ),
-                    isNewStation
-                )
-
-                Toast.makeText(this, R.string.saved_to_database, Toast.LENGTH_SHORT).show()
+                else -> {
+                    val totalSpend = price.toDouble() * liters.toInt()
+                    mapViewModel.insertIntoDatabase(
+                        Station(placeId, name, ts),
+                        FuelingAct(ts, type, price.toDouble(), liters.toInt(), totalSpend, placeId),
+                        isNewStation
+                    )
+                    Toast.makeText(this, R.string.saved_to_database, Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
+                }
             }
-            .setNegativeButton(getString(R.string.button_dismiss)) { _, _ ->
-                return@setNegativeButton
-            }.create().show()
+        }
+
+        dialog.show()
     }
 }
 

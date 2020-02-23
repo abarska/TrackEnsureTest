@@ -3,9 +3,10 @@
     <string name="placeholder">placeholder</string>
 
     <string name="octane_87">87 octane</string>
-    <string name="price">Price per liter</string>
+    <string name="price">Price</string>
+    <string name="CAD">CAD per liter</string>
     <string name="quantity">Quantity</string>
-    <string name="total">Total: </string>
+    <string name="liters">liters</string>
 
     <string name="action_sign_out">Sign out</string>
 

@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 class ListViewModel(val app: Application) : AndroidViewModel(app) {
 
     private val stationDao = GasStationDatabase.getInstance(app).stationDao
+
     val stations = stationDao.getAllStations()
 
     fun deleteStation(key: String) {
