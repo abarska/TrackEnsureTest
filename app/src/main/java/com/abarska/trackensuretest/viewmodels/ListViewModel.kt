@@ -6,8 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.abarska.trackensuretest.database.GasStationDatabase
 import com.abarska.trackensuretest.entities.Station
 import kotlinx.coroutines.launch
+import java.io.Serializable
 
-class ListViewModel(val app: Application) : AndroidViewModel(app) {
+class ListViewModel(val app: Application) : AndroidViewModel(app), Serializable{
 
     private val stationDao = GasStationDatabase.getInstance(app).stationDao
 

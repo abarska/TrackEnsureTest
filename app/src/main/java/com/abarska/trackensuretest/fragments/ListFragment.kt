@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.abarska.trackensuretest.R
 import com.abarska.trackensuretest.activities.MapActivity
-import com.abarska.trackensuretest.adapters.StationAdapter
+import com.abarska.trackensuretest.adapters.StationItemAdapter
 import com.abarska.trackensuretest.databinding.FragmentListBinding
 import com.abarska.trackensuretest.viewmodels.ListViewModel
 
@@ -32,7 +32,7 @@ class ListFragment : Fragment() {
         binding.lifecycleOwner = this
 
         val listViewModel = ViewModelProvider(this).get(ListViewModel::class.java)
-        val adapter = StationAdapter(activity!!, listViewModel)
+        val adapter = StationItemAdapter(activity!!, listViewModel)
 
         listViewModel.stations.observe(viewLifecycleOwner, Observer { list ->
             list?.let { adapter.data = list }
