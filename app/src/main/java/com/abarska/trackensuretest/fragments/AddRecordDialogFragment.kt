@@ -54,7 +54,6 @@ class AddRecordDialogFragment : DialogFragment() {
 
         mapViewModel.currentStation.observe(this, Observer { station ->
             station?.let {
-                Log.i("MY_TAG", "station is not null")
                 stationNameEditText.setText(station.stationName)
                 isNewStation = false
             }
@@ -75,9 +74,6 @@ class AddRecordDialogFragment : DialogFragment() {
             val price = pricePerLiterEditText.text.toString()
             val liters = numberOfLitersEditText.text.toString()
 
-            val ts = System.currentTimeMillis()
-            val type = fuelTypes[fuelTypeSpinner.selectedItemPosition]
-
             when {
                 TextUtils.isEmpty(name) -> stationNameEditText.error =
                     getString(R.string.empty_field_warning)
@@ -86,20 +82,20 @@ class AddRecordDialogFragment : DialogFragment() {
                 TextUtils.isEmpty(liters) -> numberOfLitersEditText.error =
                     getString(R.string.empty_field_warning)
                 else -> {
+                    val timeStamp = System.currentTimeMillis()
+                    val type = fuelTypes[fuelTypeSpinner.selectedItemPosition]
                     val totalSpend = price.toDouble() * liters.toInt()
-                    mapViewModel.insertIntoDatabase(
-                        Station(placeId!!, name, ts),
-                        FuelingAct(
-                            ts,
-                            type,
-                            price.toDouble(),
-                            liters.toInt(),
-                            totalSpend,
-                            placeId!!
-                        ),
-                        isNewStation
+                    val newStation = Station(placeId!!, name, timeStamp)
+                    val newFuelingAct = FuelingAct(
+                        timeStamp,
+                        type,
+                        price.toDouble(),
+                        liters.toInt(),
+                        totalSpend,
+                        placeId!!
                     )
-                    Toast.makeText(context, R.string.saved_to_database, Toast.LENGTH_SHORT).show()
+                    mapViewModel.insertIntoDatabase(newStation, newFuelingAct, isNewStation)
+                    mapViewModel.uploadToFirebase(newStation, newFuelingAct)
                     dialog.dismiss()
                 }
             }

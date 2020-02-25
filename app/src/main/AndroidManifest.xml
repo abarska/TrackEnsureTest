@@ -25,7 +25,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.MapActivity" />
-        <activity android:name=".activities.AddRecordActivity" />
     </application>
 
 </manifest>

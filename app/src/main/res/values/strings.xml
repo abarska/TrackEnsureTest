@@ -27,10 +27,16 @@
     <string name="location_access_denied">Access to your location is needed to display map</string>
     <string name="internet_access_denied">Internet access is needed to access gas stations info</string>
     <string name="empty_field_warning">This field cannot be empty</string>
-    <string name="saved_to_database">Saved to local database</string>
+
+    <string name="saved_to_local_database">Saved to local database</string>
+    <string name="saved_to_remote_database">Saved to remote database</string>
 
     <!-- statistics strings -->
     <string name="total_money_spent">Total money spent: %.02f CAD</string>
     <string name="total_fuel_consumed">Total fuel consumed: %d liters</string>
+
+    <!-- firebase collections -->
+    <string name="stations">stations</string>
+    <string name="fueling_acts">fueling_acts</string>
 
 </resources>

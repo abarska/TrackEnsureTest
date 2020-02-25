@@ -72,4 +72,5 @@ dependencies {
     implementation "com.google.android.material:material:$rootProject.materialVersion"
     
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.coreTestingVersion"
+    implementation 'com.google.firebase:firebase-firestore:21.4.0'
 }
