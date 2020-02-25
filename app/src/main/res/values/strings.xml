@@ -30,6 +30,9 @@
 
     <string name="saved_to_local_database">Saved to local database</string>
     <string name="saved_to_remote_database">Saved to remote database</string>
+    <string name="will_be_saved_later">Will be uploaded when internet connection is resumed</string>
+    <string name="updated_in_remote_database">Updated in the remote database</string>
+    <string name="will_be_updated_later">Will be updated when internet connection is resumed</string>
 
     <!-- statistics strings -->
     <string name="total_money_spent">Total money spent: %.02f CAD</string>

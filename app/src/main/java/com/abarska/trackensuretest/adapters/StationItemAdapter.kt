@@ -55,7 +55,8 @@ class StationItemAdapter(
         }
 
         holder.view.findViewById<ImageView>(R.id.btn_delete_station).setOnClickListener {
-            listViewModel.deleteStation(item.id)
+            listViewModel.deleteStationInRoom(item.id)
+            listViewModel.deleteStationInFirebase(item.id)
         }
     }
 }

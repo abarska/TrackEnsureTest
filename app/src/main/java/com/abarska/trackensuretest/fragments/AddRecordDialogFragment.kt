@@ -4,9 +4,11 @@ import android.app.Dialog
 import android.os.Bundle
 import android.text.InputFilter
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.Spinner
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -82,9 +84,11 @@ class AddRecordDialogFragment : DialogFragment() {
                 TextUtils.isEmpty(liters) -> numberOfLitersEditText.error =
                     getString(R.string.empty_field_warning)
                 else -> {
+
                     val timeStamp = System.currentTimeMillis()
                     val type = fuelTypes[fuelTypeSpinner.selectedItemPosition]
                     val totalSpend = price.toDouble() * liters.toInt()
+
                     val newStation = Station(placeId!!, name, timeStamp)
                     val newFuelingAct = FuelingAct(
                         timeStamp,
@@ -94,6 +98,7 @@ class AddRecordDialogFragment : DialogFragment() {
                         totalSpend,
                         placeId!!
                     )
+
                     mapViewModel.insertIntoDatabase(newStation, newFuelingAct, isNewStation)
                     mapViewModel.uploadToFirebase(newStation, newFuelingAct)
                     dialog.dismiss()

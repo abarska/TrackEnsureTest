@@ -49,13 +49,9 @@ class EditStationDialogFragment : DialogFragment() {
             if (TextUtils.isEmpty(newName)) {
                 nameEditText.error = activity!!.getString(R.string.empty_field_warning)
             } else {
-                listViewModel.editStation(
-                    Station(
-                        station!!.id,
-                        newName,
-                        System.currentTimeMillis()
-                    )
-                )
+                val updated = Station(station!!.id, newName, System.currentTimeMillis())
+                listViewModel.editStationInRoom(updated)
+                listViewModel.editStationInFirebase(updated)
                 dialog.dismiss()
             }
         }
