@@ -1,36 +1,42 @@
 package com.abarska.trackensuretest.viewmodels
 
 import android.app.Application
-import android.widget.Toast
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.content.ComponentName
+import android.content.Context
+import android.os.PersistableBundle
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.abarska.trackensuretest.R
 import com.abarska.trackensuretest.database.GasStationDatabase
-import com.abarska.trackensuretest.entities.STATION_TABLE
 import com.abarska.trackensuretest.entities.Station
+import com.abarska.trackensuretest.services.FirebaseJobService
+import com.abarska.trackensuretest.utils.delete
 import com.abarska.trackensuretest.utils.hasInternetConnection
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QueryDocumentSnapshot
+import com.abarska.trackensuretest.utils.update
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import java.io.Serializable
+
+const val DELETE_JOB_ID = 122
+const val UPDATE_JOB_ID = 123
 
 class ListViewModel(val app: Application) : AndroidViewModel(app), Serializable {
 
     private val stationDao = GasStationDatabase.getInstance(app).stationDao
-
     val stations = stationDao.getAllStations()
-
-    private val database = FirebaseFirestore.getInstance()
 
     fun deleteStationInRoom(key: String) {
         viewModelScope.launch { stationDao.delete(key) }
     }
 
-    fun deleteStationInFirebase(id: String) {
+    fun deleteStationInFirebase(station: Station) {
         if (hasInternetConnection(app)) {
-            deleteNow(id)
+            delete(app, station)
         } else {
-            launchServiceToDelete(id)
+            launchDeleteService(prepareBundle(station))
         }
     }
 
@@ -40,44 +46,49 @@ class ListViewModel(val app: Application) : AndroidViewModel(app), Serializable 
 
     fun editStationInFirebase(station: Station) {
         if (hasInternetConnection(app)) {
-            updateNow(station)
+            update(app, station)
         } else {
-            launchServiceToUpdate(station)
+            launchUpdateService(prepareBundle(station))
         }
     }
 
-    private fun updateNow(station: Station) {
-        val docRef = database
-            .collection(app.applicationContext.getString(R.string.stations))
-            .document(station.id)
-        docRef.set(station).addOnSuccessListener {
-            Toast.makeText(app.applicationContext, R.string.updated, Toast.LENGTH_SHORT).show()
+    private fun prepareBundle(station: Station) : PersistableBundle {
+        val gson = Gson()
+        val jsonStation = gson.toJson(station)
+        val bundle = PersistableBundle()
+        bundle.putString(app.applicationContext.getString(R.string.stations), jsonStation)
+        return bundle
+    }
+
+    private fun launchUpdateService(bundle: PersistableBundle) {
+        val componentName = ComponentName(app.applicationContext, FirebaseJobService::class.java)
+        val jobInfo = JobInfo.Builder(UPDATE_JOB_ID, componentName)
+            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+            .setPersisted(true)
+            .setExtras(bundle)
+            .build()
+        val scheduler = app.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+        val resultCode = scheduler.schedule(jobInfo)
+        if (resultCode == JobScheduler.RESULT_SUCCESS) {
+            Log.i("MY_TAG", "job scheduled")
+        } else {
+            Log.i("MY_TAG", "job scheduling failed")
         }
     }
 
-    private fun deleteNow(id: String) {
-        val docRef = database
-            .collection(app.applicationContext.getString(R.string.stations))
-            .document(id)
-        val subCollection =
-            docRef.collection(app.applicationContext.getString(R.string.fueling_acts))
-        subCollection.get().addOnCompleteListener { task ->
-            task.let {
-                for (doc in task.result!!) {
-                    subCollection.document(doc.id).delete()
-                }
-            }
+    private fun launchDeleteService(bundle: PersistableBundle) {
+        val componentName = ComponentName(app.applicationContext, FirebaseJobService::class.java)
+        val jobInfo = JobInfo.Builder(DELETE_JOB_ID, componentName)
+            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+            .setPersisted(true)
+            .setExtras(bundle)
+            .build()
+        val scheduler = app.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+        val resultCode = scheduler.schedule(jobInfo)
+        if (resultCode == JobScheduler.RESULT_SUCCESS) {
+            Log.i("MY_TAG", "job scheduled")
+        } else {
+            Log.i("MY_TAG", "job scheduling failed")
         }
-        docRef.delete().addOnSuccessListener {
-            Toast.makeText(app.applicationContext, R.string.deleted, Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun launchServiceToUpdate(station: Station) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    private fun launchServiceToDelete(id: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

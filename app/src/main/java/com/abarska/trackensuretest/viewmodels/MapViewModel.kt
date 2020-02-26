@@ -18,12 +18,11 @@ import com.abarska.trackensuretest.entities.Station
 import com.abarska.trackensuretest.services.FirebaseJobService
 import com.abarska.trackensuretest.utils.hasInternetConnection
 import com.abarska.trackensuretest.utils.upload
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import java.io.Serializable
 
-const val UPLOAD_JOB_ID = 123
+const val UPLOAD_JOB_ID = 121
 
 class MapViewModel(val app: Application) : AndroidViewModel(app), Serializable {
 
@@ -47,6 +46,11 @@ class MapViewModel(val app: Application) : AndroidViewModel(app), Serializable {
         if (hasInternetConnection(app)) {
             upload(app, station, fuelingAct)
         } else {
+            Toast.makeText(
+                app.baseContext,
+                app.getString(R.string.will_be_updated_later),
+                Toast.LENGTH_LONG
+            ).show()
             launchUploadService(station, fuelingAct)
         }
     }
@@ -54,20 +58,16 @@ class MapViewModel(val app: Application) : AndroidViewModel(app), Serializable {
     private fun launchUploadService(station: Station, fuelingAct: FuelingAct) {
 
         val gson = Gson()
-        val strinGsonStation = gson.toJson(station)
-        val stringGsonFuelingAct = gson.toJson(fuelingAct)
+        val jsonStation = gson.toJson(station)
+        val jsonFuelingAct = gson.toJson(fuelingAct)
         val bundle = PersistableBundle()
-        bundle.putString(app.applicationContext.getString(R.string.stations), strinGsonStation)
-        bundle.putString(
-            app.applicationContext.getString(R.string.fueling_acts),
-            stringGsonFuelingAct
-        )
+        bundle.putString(app.applicationContext.getString(R.string.stations), jsonStation)
+        bundle.putString(app.applicationContext.getString(R.string.fueling_acts), jsonFuelingAct)
 
         val componentName = ComponentName(app.applicationContext, FirebaseJobService::class.java)
         val jobInfo = JobInfo.Builder(UPLOAD_JOB_ID, componentName)
-            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
+            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
             .setPersisted(true)
-            .setPeriodic(15 * 60 * 1000)
             .setExtras(bundle)
             .build()
         val scheduler = app.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
