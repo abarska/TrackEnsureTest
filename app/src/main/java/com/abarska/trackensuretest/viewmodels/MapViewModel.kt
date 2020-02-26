@@ -2,6 +2,7 @@ package com.abarska.trackensuretest.viewmodels
 
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
@@ -45,12 +46,15 @@ class MapViewModel(val app: Application) : AndroidViewModel(app), Serializable {
         val db = FirebaseFirestore.getInstance()
 
         val stationsRef = db.collection(app.applicationContext.getString(R.string.stations))
-        stationsRef.add(station)
+        stationsRef.document(station.id).set(station)
 
-        val fuelingActRef = stationsRef
-            .document(station.id)
-            .collection(app.applicationContext.getString(R.string.fueling_acts))
-        fuelingActRef.add(fuelingAct)
+        val fuelingActRef = stationsRef.document(station.id)
+        fuelingActRef.collection(app.applicationContext.getString(R.string.fueling_acts))
+            .document(fuelingAct.dateTime.toString())
+            .set(fuelingAct)
+            .addOnSuccessListener {
+                Toast.makeText(app.applicationContext, R.string.saved, Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun launchService(station: Station, fuelingAct: FuelingAct) {

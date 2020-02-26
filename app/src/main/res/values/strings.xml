@@ -28,6 +28,9 @@
     <string name="internet_access_denied">Internet access is needed to access gas stations info</string>
     <string name="empty_field_warning">This field cannot be empty</string>
 
+    <string name="saved">Saved</string>
+    <string name="saved_station">Saved station</string>
+    <string name="saved_fa">Saved fueling act</string>
     <string name="saved_to_local_database">Saved to local database</string>
     <string name="saved_to_remote_database">Saved to remote database</string>
     <string name="will_be_saved_later">Will be uploaded when internet connection is resumed</string>

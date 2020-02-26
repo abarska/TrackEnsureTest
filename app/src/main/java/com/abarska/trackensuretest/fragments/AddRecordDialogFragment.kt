@@ -5,10 +5,7 @@ import android.os.Bundle
 import android.text.InputFilter
 import android.text.TextUtils
 import android.view.LayoutInflater
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
