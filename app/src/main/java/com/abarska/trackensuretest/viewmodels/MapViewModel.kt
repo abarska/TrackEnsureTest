@@ -1,6 +1,11 @@
 package com.abarska.trackensuretest.viewmodels
 
 import android.app.Application
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.content.ComponentName
+import android.content.Context
+import android.os.PersistableBundle
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
@@ -10,10 +15,15 @@ import com.abarska.trackensuretest.R
 import com.abarska.trackensuretest.database.GasStationDatabase
 import com.abarska.trackensuretest.entities.FuelingAct
 import com.abarska.trackensuretest.entities.Station
+import com.abarska.trackensuretest.services.FirebaseJobService
 import com.abarska.trackensuretest.utils.hasInternetConnection
+import com.abarska.trackensuretest.utils.upload
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import java.io.Serializable
+
+const val UPLOAD_JOB_ID = 123
 
 class MapViewModel(val app: Application) : AndroidViewModel(app), Serializable {
 
@@ -35,31 +45,38 @@ class MapViewModel(val app: Application) : AndroidViewModel(app), Serializable {
 
     fun uploadToFirebase(station: Station, fuelingAct: FuelingAct) {
         if (hasInternetConnection(app)) {
-            uploadNow(station, fuelingAct)
+            upload(app, station, fuelingAct)
         } else {
-            launchService(station, fuelingAct)
+            launchUploadService(station, fuelingAct)
         }
     }
 
-    private fun uploadNow(station: Station, fuelingAct: FuelingAct) {
+    private fun launchUploadService(station: Station, fuelingAct: FuelingAct) {
 
-        val db = FirebaseFirestore.getInstance()
+        val gson = Gson()
+        val strinGsonStation = gson.toJson(station)
+        val stringGsonFuelingAct = gson.toJson(fuelingAct)
+        val bundle = PersistableBundle()
+        bundle.putString(app.applicationContext.getString(R.string.stations), strinGsonStation)
+        bundle.putString(
+            app.applicationContext.getString(R.string.fueling_acts),
+            stringGsonFuelingAct
+        )
 
-        val stationsRef = db.collection(app.applicationContext.getString(R.string.stations))
-        stationsRef.document(station.id).set(station)
-
-        val fuelingActRef = stationsRef.document(station.id)
-        fuelingActRef.collection(app.applicationContext.getString(R.string.fueling_acts))
-            .document(fuelingAct.dateTime.toString())
-            .set(fuelingAct)
-            .addOnSuccessListener {
-                Toast.makeText(app.applicationContext, R.string.saved, Toast.LENGTH_SHORT).show()
-            }
-    }
-
-    private fun launchService(station: Station, fuelingAct: FuelingAct) {
-        Log.i("MY_TAG", app.applicationContext.getString(R.string.will_be_saved_later))
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val componentName = ComponentName(app.applicationContext, FirebaseJobService::class.java)
+        val jobInfo = JobInfo.Builder(UPLOAD_JOB_ID, componentName)
+            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
+            .setPersisted(true)
+            .setPeriodic(15 * 60 * 1000)
+            .setExtras(bundle)
+            .build()
+        val scheduler = app.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+        val resultCode = scheduler.schedule(jobInfo)
+        if (resultCode == JobScheduler.RESULT_SUCCESS) {
+            Log.i("MY_TAG", "job scheduled")
+        } else {
+            Log.i("MY_TAG", "job scheduling failed")
+        }
     }
 }
 
