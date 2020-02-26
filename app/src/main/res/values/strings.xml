@@ -29,6 +29,9 @@
     <string name="empty_field_warning">This field cannot be empty</string>
 
     <string name="saved">Saved</string>
+    <string name="deleted">Deleted</string>
+    <string name="updated">Updated</string>
+
     <string name="saved_station">Saved station</string>
     <string name="saved_fa">Saved fueling act</string>
     <string name="saved_to_local_database">Saved to local database</string>
