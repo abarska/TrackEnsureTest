@@ -49,6 +49,7 @@ fun upload(app: Application, station: Station, fuelingAct: FuelingAct) {
         .set(fuelingAct)
         .addOnSuccessListener {
             app.applicationContext.getString(R.string.saved_to_remote_database).showInfoLog()
+            sendNotification(app.applicationContext)
         }.addOnFailureListener {
             app.applicationContext.getString(R.string.error_saving).showInfoLog()
         }
@@ -68,6 +69,7 @@ fun delete(app: Application, station: Station) {
     }
     docRef.delete().addOnSuccessListener {
         app.applicationContext.getString(R.string.deleted_in_remote_database).showInfoLog()
+        sendNotification(app.applicationContext)
     }.addOnFailureListener {
         app.applicationContext.getString(R.string.error_deleting).showInfoLog()
     }
@@ -79,7 +81,7 @@ fun update(app: Application, station: Station) {
         db.collection(app.applicationContext.getString(R.string.stations)).document(station.id)
     docRef.set(station).addOnSuccessListener {
         app.applicationContext.getString(R.string.updated_in_remote_database).showInfoLog()
-
+        sendNotification(app.applicationContext)
     }.addOnFailureListener {
         app.applicationContext.getString(R.string.error_updating).showInfoLog()
     }

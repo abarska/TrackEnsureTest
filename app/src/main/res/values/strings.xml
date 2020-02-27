@@ -50,4 +50,9 @@
     <string name="job_scheduled">job scheduled</string>
     <string name="job_scheduling_failed">job scheduling failed</string>
 
+    <string name="notification_channel_name">remote database notification channel</string>
+    <string name="notification_channel_description">channel for remote database updates</string>
+    <string name="notification_title">database sync</string>
+    <string name="notification_text">database updated at %s</string>
+
 </resources>

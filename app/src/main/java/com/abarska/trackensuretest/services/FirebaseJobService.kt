@@ -6,6 +6,7 @@ import com.abarska.trackensuretest.R
 import com.abarska.trackensuretest.entities.FuelingAct
 import com.abarska.trackensuretest.entities.Station
 import com.abarska.trackensuretest.utils.delete
+import com.abarska.trackensuretest.utils.sendNotification
 import com.abarska.trackensuretest.utils.update
 import com.abarska.trackensuretest.utils.upload
 import com.abarska.trackensuretest.viewmodels.DELETE_JOB_ID
