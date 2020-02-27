@@ -7,13 +7,13 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.abarska.trackensuretest.R
-import com.abarska.truckensuretest.util.DatabaseJoinUtilityClasses
+import com.abarska.trackensuretest.utils.DatabaseJoinUtilityClass
 
 class StatisticsItemAdapter(
     private val activity: FragmentActivity
 ) : RecyclerView.Adapter<StatisticsItemViewHolder>() {
 
-    var data = listOf<DatabaseJoinUtilityClasses>()
+    var data = listOf<DatabaseJoinUtilityClass>()
         set(value) {
             field = value
             notifyDataSetChanged()

@@ -7,7 +7,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.os.PersistableBundle
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
@@ -17,6 +16,7 @@ import com.abarska.trackensuretest.entities.FuelingAct
 import com.abarska.trackensuretest.entities.Station
 import com.abarska.trackensuretest.services.FirebaseJobService
 import com.abarska.trackensuretest.utils.hasInternetConnection
+import com.abarska.trackensuretest.utils.showToast
 import com.abarska.trackensuretest.utils.upload
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
@@ -45,13 +45,10 @@ class MapViewModel(val app: Application) : AndroidViewModel(app), Serializable {
     fun uploadToFirebase(station: Station, fuelingAct: FuelingAct) {
         if (hasInternetConnection(app)) {
             upload(app, station, fuelingAct)
+            app.getString(R.string.saved).showToast(app.baseContext)
         } else {
-            Toast.makeText(
-                app.baseContext,
-                app.getString(R.string.will_be_updated_later),
-                Toast.LENGTH_LONG
-            ).show()
             launchUploadService(station, fuelingAct)
+            app.getString(R.string.will_be_saved_later).showToast(app.baseContext)
         }
     }
 

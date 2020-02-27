@@ -1,6 +1,6 @@
-package com.abarska.truckensuretest.util
+package com.abarska.trackensuretest.utils
 
-data class DatabaseJoinUtilityClasses(
+data class DatabaseJoinUtilityClass(
     val stationName: String,
     val totalSpend: Double,
     val totalLiters: Int

@@ -14,8 +14,8 @@ import com.abarska.trackensuretest.R
 import com.abarska.trackensuretest.activities.PLACE_ID
 import com.abarska.trackensuretest.entities.FuelingAct
 import com.abarska.trackensuretest.entities.Station
+import com.abarska.trackensuretest.utils.DecimalInputFilter
 import com.abarska.trackensuretest.viewmodels.MapViewModel
-import com.abarska.truckensuretest.util.DecimalInputFilter
 
 class AddRecordDialogFragment : DialogFragment() {
 
@@ -59,7 +59,7 @@ class AddRecordDialogFragment : DialogFragment() {
         })
 
         val dialog = AlertDialog.Builder(context!!)
-            .setTitle(getString(R.string.add_record))
+            .setTitle(getString(R.string.add_record_header))
             .setView(dialogView)
             .create()
 

@@ -1,4 +1,4 @@
-package com.abarska.truckensuretest.util
+package com.abarska.trackensuretest.utils
 
 import android.text.InputFilter
 import android.text.Spanned

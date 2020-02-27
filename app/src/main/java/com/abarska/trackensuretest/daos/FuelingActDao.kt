@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.abarska.trackensuretest.entities.*
-import com.abarska.truckensuretest.util.DatabaseJoinUtilityClasses
+import com.abarska.trackensuretest.utils.DatabaseJoinUtilityClass
 
 @Dao
 interface FuelingActDao {
@@ -23,5 +23,5 @@ interface FuelingActDao {
                 "GROUP BY $FUELING_ACT_TABLE.$FOREIGN_KEY_STATION_ID " +
                 "ORDER BY totalSpend DESC;"
     )
-    fun getStationSpendLiter(): LiveData<List<DatabaseJoinUtilityClasses>>
+    fun getStationSpendLiter(): LiveData<List<DatabaseJoinUtilityClass>>
 }

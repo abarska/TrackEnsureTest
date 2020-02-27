@@ -5,11 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.abarska.trackensuretest.R
 import com.abarska.trackensuretest.adapters.TabFragmentPagerAdapter
+import com.abarska.trackensuretest.utils.showToast
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_SIGN_IN && resultCode == Activity.RESULT_CANCELED) {
-            Toast.makeText(this, R.string.sign_in_canceled, Toast.LENGTH_SHORT).show()
+            getString(R.string.sign_in_canceled).showToast(this)
             finish()
         }
     }

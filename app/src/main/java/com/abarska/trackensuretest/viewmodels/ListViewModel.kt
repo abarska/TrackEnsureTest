@@ -13,9 +13,7 @@ import com.abarska.trackensuretest.R
 import com.abarska.trackensuretest.database.GasStationDatabase
 import com.abarska.trackensuretest.entities.Station
 import com.abarska.trackensuretest.services.FirebaseJobService
-import com.abarska.trackensuretest.utils.delete
-import com.abarska.trackensuretest.utils.hasInternetConnection
-import com.abarska.trackensuretest.utils.update
+import com.abarska.trackensuretest.utils.*
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import java.io.Serializable
@@ -37,6 +35,7 @@ class ListViewModel(val app: Application) : AndroidViewModel(app), Serializable 
             delete(app, station)
         } else {
             launchDeleteService(prepareBundle(station))
+            app.getString(R.string.will_be_deleted_later).showToast(app.baseContext)
         }
     }
 
@@ -49,15 +48,8 @@ class ListViewModel(val app: Application) : AndroidViewModel(app), Serializable 
             update(app, station)
         } else {
             launchUpdateService(prepareBundle(station))
+            app.getString(R.string.will_be_updated_later).showToast(app.baseContext)
         }
-    }
-
-    private fun prepareBundle(station: Station) : PersistableBundle {
-        val gson = Gson()
-        val jsonStation = gson.toJson(station)
-        val bundle = PersistableBundle()
-        bundle.putString(app.applicationContext.getString(R.string.stations), jsonStation)
-        return bundle
     }
 
     private fun launchUpdateService(bundle: PersistableBundle) {
@@ -68,12 +60,8 @@ class ListViewModel(val app: Application) : AndroidViewModel(app), Serializable 
             .setExtras(bundle)
             .build()
         val scheduler = app.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-        val resultCode = scheduler.schedule(jobInfo)
-        if (resultCode == JobScheduler.RESULT_SUCCESS) {
-            Log.i("MY_TAG", "job scheduled")
-        } else {
-            Log.i("MY_TAG", "job scheduling failed")
-        }
+        val result = scheduler.schedule(jobInfo)
+        checkResult(result)
     }
 
     private fun launchDeleteService(bundle: PersistableBundle) {
@@ -84,11 +72,23 @@ class ListViewModel(val app: Application) : AndroidViewModel(app), Serializable 
             .setExtras(bundle)
             .build()
         val scheduler = app.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-        val resultCode = scheduler.schedule(jobInfo)
+        val result = scheduler.schedule(jobInfo)
+        checkResult(result)
+    }
+
+    private fun prepareBundle(station: Station): PersistableBundle {
+        val gson = Gson()
+        val jsonStation = gson.toJson(station)
+        val bundle = PersistableBundle()
+        bundle.putString(app.applicationContext.getString(R.string.stations), jsonStation)
+        return bundle
+    }
+
+    private fun checkResult(resultCode: Int) {
         if (resultCode == JobScheduler.RESULT_SUCCESS) {
-            Log.i("MY_TAG", "job scheduled")
+            app.baseContext.getString(R.string.job_scheduled).showInfoLog()
         } else {
-            Log.i("MY_TAG", "job scheduling failed")
+            app.baseContext.getString(R.string.job_scheduling_failed).showInfoLog()
         }
     }
 }

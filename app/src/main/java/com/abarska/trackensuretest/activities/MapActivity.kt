@@ -3,13 +3,13 @@ package com.abarska.trackensuretest.activities
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.abarska.trackensuretest.R
 import com.abarska.trackensuretest.fragments.AddRecordDialogFragment
+import com.abarska.trackensuretest.utils.showToast
 import com.abarska.trackensuretest.viewmodels.MapViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -93,8 +93,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             if (grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 enableMyLocation()
             } else {
-                Toast.makeText(baseContext, R.string.location_access_denied, Toast.LENGTH_SHORT)
-                    .show()
+                getString(R.string.location_access_denied).showToast(this)
                 finish()
             }
         }
