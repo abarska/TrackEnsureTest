@@ -42,9 +42,10 @@
     <string name="will_be_deleted_later">Will be deleted when internet connection is resumed</string>
     <string name="error_deleting">Deleting in remote database failure</string>
 
-    <!-- firebase collections -->
+    <!-- firebase collections / bundle keys -->
     <string name="stations">stations</string>
     <string name="fueling_acts">fueling_acts</string>
+    <string name="firebase_action_flag">firebase_action_flag</string>
 
     <!-- job log strings -->
     <string name="job_scheduled">job scheduled</string>
@@ -53,6 +54,8 @@
     <string name="notification_channel_name">remote database notification channel</string>
     <string name="notification_channel_description">channel for remote database updates</string>
     <string name="notification_title">database sync</string>
-    <string name="notification_text">database updated at %s</string>
+    <string name="notification_upload_text">%s added to firebase at %s</string>
+    <string name="notification_update_text">%s updated in firebase at %s</string>
+    <string name="notification_delete_text">%s deleted from firebase at %s</string>
 
 </resources>

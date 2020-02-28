@@ -8,6 +8,9 @@ import android.os.Build
 import com.abarska.trackensuretest.R
 import com.abarska.trackensuretest.entities.FuelingAct
 import com.abarska.trackensuretest.entities.Station
+import com.abarska.trackensuretest.viewmodels.DELETE_JOB_ID
+import com.abarska.trackensuretest.viewmodels.UPDATE_JOB_ID
+import com.abarska.trackensuretest.viewmodels.UPLOAD_JOB_ID
 import com.google.firebase.firestore.FirebaseFirestore
 
 fun hasInternetConnection(app: Application): Boolean {
@@ -49,7 +52,7 @@ fun upload(app: Application, station: Station, fuelingAct: FuelingAct) {
         .set(fuelingAct)
         .addOnSuccessListener {
             app.applicationContext.getString(R.string.saved_to_remote_database).showInfoLog()
-            sendNotification(app.applicationContext)
+            sendNotification(app.applicationContext, UPLOAD_JOB_ID, station.stationName)
         }.addOnFailureListener {
             app.applicationContext.getString(R.string.error_saving).showInfoLog()
         }
@@ -69,7 +72,7 @@ fun delete(app: Application, station: Station) {
     }
     docRef.delete().addOnSuccessListener {
         app.applicationContext.getString(R.string.deleted_in_remote_database).showInfoLog()
-        sendNotification(app.applicationContext)
+        sendNotification(app.applicationContext, DELETE_JOB_ID, station.stationName)
     }.addOnFailureListener {
         app.applicationContext.getString(R.string.error_deleting).showInfoLog()
     }
@@ -81,7 +84,7 @@ fun update(app: Application, station: Station) {
         db.collection(app.applicationContext.getString(R.string.stations)).document(station.id)
     docRef.set(station).addOnSuccessListener {
         app.applicationContext.getString(R.string.updated_in_remote_database).showInfoLog()
-        sendNotification(app.applicationContext)
+        sendNotification(app.applicationContext, UPDATE_JOB_ID, station.stationName)
     }.addOnFailureListener {
         app.applicationContext.getString(R.string.error_updating).showInfoLog()
     }
